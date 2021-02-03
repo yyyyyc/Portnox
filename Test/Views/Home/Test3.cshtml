@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Test3";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        div {
+            padding: 10px;
+        }
+        .switch {
+            border: 1px solid #cdcdcd;
+            border-radius: 8px;
+            background: #efefef;
+        }
+        .port {
+            background: pink;
+        }
+        .device {
+            background: lightgreen;
+        }
+        .device_history {
+            background: lightgreen;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .event {
+            padding: 5px;
+            border:1px solid black;
+            background: #e6dca6;
+        }
+        .events{
+            
+            border-collapse:collapse;
+            border:1px solid black;
+            background: #e6dca6;
+        }
+        .events_title th{
+            padding: 5px;
+            border:1px solid black;
+            background:#ff6a00;
+        }
+        .switch_title {
+            background: #ff9999;
+            font-size:large;
+            text-decoration: underline;
+        }
+
+    </style>
+    <title></title>
+</head>
+<body>
+    <br/><br/><br />
+    <div class="panel-group accordion faq-content" id="accordion" style="background-color:#e2f2fd">
+
+        @foreach (Models.Switch sw in ViewBag.nw.switches)
+        {
+
+            <div class="switch">
+                <span class="switch_title"><h2>Switch: @(sw.ip)</h2></span><br/>
+                <span>
+                    Num of Ports: @(sw.ports.Count)</span>
+
+
+                @foreach (Models.Port prt in sw.ports)
+                {
+                        <div class="port">
+                            Port: @(prt.id)<br/>
+                            Connected Device: @((prt.current_device == "")?" <none> ": prt.current_device)
+
+                            <div class="device_history">Connected Devices History:</div>
+                            @foreach (Models.Device dv in prt.connected_devices)
+                            {
+                                <div class="device">Device MAC: @(dv.mac)</div>
+                            }
+
+                        </div>
+                    }
+
+                <div><u>Events List</u></div>
+
+                <table class="events">
+                    <tr class="events_title">
+                        <th>Event ID</th>
+                        <th>Switch IP</th>
+                        <th>Port ID</th>
+                        <th>Device MAC</th>
+                        <th>Remarks</th>
+                    </tr>
+                    @foreach (Models.Event ev in sw.events)
+                    {
+                        <tr>
+                            <td class="event">@(ev.id)</td>
+                            <td class="event">@(ev.ip)</td>
+                            <td class="event">@(ev.port_id)</td>
+                            <td class="event">@(ev.mac)</td>
+                            <td class="event">@(ev.remarks)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <br/>
+        }
+     </div>
+</body>
+
+</html>
